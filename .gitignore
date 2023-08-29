@@ -1,0 +1,18 @@
+# Ignored folders
+build/
+dist/
+venv/
+
+# Ignored files
+./*.py
+*.pyc
+*.pyo
+__pycache__/
+.idea/
+*.spec
+./Subtitlegenerator/QtApp.py
+./Subtitlegenerator/QtUIwrapper.py
+
+# Ignored OS-specific files
+.DS_Store
+Thumbs.db
