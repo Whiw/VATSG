@@ -10,8 +10,7 @@ venv/
 __pycache__/
 .idea/
 *.spec
-./Subtitlegenerator/QtApp.py
-./Subtitlegenerator/QtUIwrapper.py
+*.json
 
 # Ignored OS-specific files
 .DS_Store

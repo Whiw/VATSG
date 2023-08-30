@@ -6,38 +6,61 @@ import tkinter.ttk as ttk
 
 import threading
 import os
+import tqdm
 
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from PIL import ImageTk
 import qrcode
+import whisper
 
 import UIwrapper
 import localization
+import sys
 
 import queue
 
+from settings import load_settings, load_apikey, settingjson, save_apikey
 
 update_queue = queue.Queue()
 lock = threading.Lock()
 
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 defaultdir = "C:/Users"
 
 window = TkinterDnD.Tk()
 window.title(localization.getstr('appname') + __version__ + " by whiw")
-window.geometry('720x320')
+window.geometry('720x360')
 
 translateoption_var = tkinter.StringVar()
 translateoption_var.set("small")
-trnanslateoptions = ["tiny", "base", "small", "medium", "large", "large-v2"]
+trnanslateoptions = ["tiny", "base", "small", "medium", "large-v1", "large-v2"]
 
 cuda_var = tkinter.BooleanVar()
 
+original_var = tkinter.BooleanVar()
+
+fast_var = tkinter.BooleanVar()
+class _CustomProgressBar(tqdm.tqdm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._current = self.n  # Set the initial value
+
+    def update(self, n):
+        super().update(n)
+        self._current += n
+
+        # Handle progress here
+        print("Progress: " + str(self._current) + "/" + str(self.total))
+        progressbar['maximum'] = self.total
+        progressbar['value'] = self._current
+        percentagelabel['text'] = str((self._current / self.total) * 100) + "%"
 
 
+transcribe_module = sys.modules['whisper.transcribe']
+transcribe_module.tqdm.tqdm = _CustomProgressBar
 
 
 def open_donation_link():
@@ -62,11 +85,16 @@ def open_dialog():
 
 
 def proceedfastwhisperthread():
-    from whisper import transcribe_from_mp3_fast_whisper
+    from mywhisper import transcribe_from_mp3_fast_whisper, transcribe_from_mp3_whisper
     targetfile = targetfileEntry.get()
     targetfile_audio = os.path.splitext(targetfile)[0] + ".mp3"
-    transferuiwrapper = UIwrapper.UIwrapper(update_queue, lock, apikeyinput.get(), cuda_var.get(), translateoption_var.get(), sourcelanguagecodeinput.get(), targetlanguagecodeinput.get())
-    transcribe_from_mp3_fast_whisper(targetfile, targetfile_audio, transferuiwrapper)
+    transferuiwrapper = UIwrapper.UIwrapper(update_queue, lock, apikeyinput.get(), cuda_var.get(), translateoption_var.get(), sourcelanguagecodeinput.get(), targetlanguagecodeinput.get(), original_var.get(), fast_var.get())
+    save_apikey(apikeyinput.get())
+    settingjson(transferuiwrapper)
+    if fast_var.get():
+        transcribe_from_mp3_fast_whisper(targetfile, targetfile_audio, transferuiwrapper)
+    else:
+        transcribe_from_mp3_whisper(targetfile, targetfile_audio, transferuiwrapper)
 
 
 
@@ -87,10 +115,24 @@ def update_ui_from_queue():
             with lock:
                 percentagelabel['text'] = msg[1]
                 proceedbutton.config(state=NORMAL)
+                progressbar['value'] = 0
                 return
     window.after(100, update_ui_from_queue)
 
 
+def initialize():
+    if not os.path.exists("settings.json"):
+        return
+    else:
+        settings = load_settings()
+        if load_apikey() is not None:
+            apikeyinput.insert(0, load_apikey().decode('utf-16-le'))
+        cuda_var.set(settings["cuda_var"])
+        translateoption_var.set(settings["translateoption_var"])
+        sourcelanguagecodeinput.insert(0, settings["sourcelanguagecodeinput"])
+        targetlanguagecodeinput.insert(0, settings["targetlanguagecodeinput"])
+        original_var.set(settings["original"])
+        fast_var.set(settings["fast"])
 
 
 def proceed():
@@ -122,6 +164,15 @@ targetfileEntry.grid(column=1, row=1)
 button = Button(frame1, text=localization.getstr('selectfile'), command=open_dialog)
 button.grid(column=0, row=1)
 
+frame4 = Frame(frame1)
+frame4.grid(column=0, row=2)
+
+label = Label(frame4, text=localization.getstr('choosemodel'))
+label.grid(column=0, row=0)
+
+fastoption = Checkbutton(frame4, text="Fast", variable=fast_var)
+fastoption.grid(column=1, row=0)
+
 frame2 = Frame(frame1)
 frame2.grid(column=1, row=2)
 
@@ -140,8 +191,6 @@ sourcelanguagecodeinput.grid(column=1, row=3)
 label = Label(frame1, text=localization.getstr('targetlangcode'))
 label.grid(column=0, row=4)
 
-label = Label(frame1, text=localization.getstr('choosemodel'))
-label.grid(column=0, row=2)
 
 
 targetlanguagecodeinput = Entry(frame1, width=30)
@@ -150,8 +199,15 @@ targetlanguagecodeinput.grid(column=1, row=4)
 label = Label(frame1, text=localization.getstr('sourcelangcode'))
 label.grid(column=0, row=3)
 
-proceedbutton = Button(frame1, text=localization.getstr('generate'), command=proceed)
-proceedbutton.grid(column=0, row=5)
+
+frame3 = Frame(frame1)
+frame3.grid(column=0, row=5)
+
+proceedbutton = Button(frame3, text=localization.getstr('generate'), command=proceed)
+proceedbutton.grid(column=0, row=0)
+
+originalcheckbox = Checkbutton(frame3, text=localization.getstr('original'), variable=original_var)
+originalcheckbox.grid(column=1, row=0)
 
 progressbar = ttk.Progressbar(frame1, length=100, maximum=20)
 progressbar.grid(column=1, row=5)
@@ -169,6 +225,14 @@ kakao_label.grid(column=1, row=7)
 patreonlabel = Label(frame1, text=localization.getstr('donation_patreon'), fg="red", cursor="hand2")
 patreonlabel.grid(column=0, row=8)
 patreonlabel.bind("<Button-1>", lambda e: open_patreon_link())
+
+email_entry = Entry(frame1, width=50)
+email_entry.insert(0, localization.getstr("contact") + "hamwhiw330@gmail.com")
+email_entry.config(state="readonly")  # 읽기 전용으로 설정
+email_entry.grid(column = 0, row=9)
+
+
+initialize()
 
 
 qr = qrcode.QRCode(
@@ -189,11 +253,5 @@ qr_label.grid(column=1, row=8,  padx=10, pady=10)
 
 if __name__ == '__main__':
     window.mainloop()
-    """
-    import sys
 
-    app = QApplication(sys.argv)
-    ex = QtApp.App()
-    sys.exit(app.exec_())
-    """
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

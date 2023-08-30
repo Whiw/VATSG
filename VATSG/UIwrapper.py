@@ -1,5 +1,5 @@
 class UIwrapper:
-    def __init__(self, queue, lock, key, cuda_var, translateoption_var, srclanguagecodeinput, targetlanguagecodinput):
+    def __init__(self, queue, lock, key, cuda_var, translateoption_var, srclanguagecodeinput, targetlanguagecodinput, original_var, fast_option):
         self.queue = queue
         self.lock = lock
         self.key = key
@@ -7,6 +7,8 @@ class UIwrapper:
         self.translateoption_var = translateoption_var
         self.srclanguagecodeinput = srclanguagecodeinput
         self.targetlanguagecodinput = targetlanguagecodinput
+        self.original_var = original_var
+        self.fast_option = fast_option
 
     def update_percentagelabel_post(self, text, value):
         with self.lock:
@@ -37,5 +39,8 @@ class UIwrapper:
     def get_trglanguagecodeinput(self):
         return self.targetlanguagecodinput
 
+    def get_original_var(self):
+        return self.original_var
 
-
+    def get_fast_var(self):
+        return self.fast_option

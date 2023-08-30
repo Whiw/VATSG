@@ -146,3 +146,30 @@ def translateusingapitofile(src, tar, uiwrapper):
     result = deeplwrapper.translateusingapi(raw, uiwrapper)
     with open(tar, "w", encoding="utf8") as f:
         f.write(result)
+
+
+def split_string_by_max_byte(s, max_bytes=102400):  # 100KB
+    lines = s.split('\n')
+    chunks = []
+    chunk = ''
+    byte_count = 0
+
+    for line in lines:
+        line_with_newline = line + '\n'
+        line_byte_size = len(line_with_newline.encode('utf-8'))
+
+        if byte_count + line_byte_size > max_bytes:
+            chunks.append(chunk)
+            chunk = line_with_newline
+            byte_count = line_byte_size
+        else:
+            chunk += line_with_newline
+            byte_count += line_byte_size
+
+    if chunk:
+        chunks.append(chunk)
+
+    return chunks
+
+def get_byte_size(s, encoding='utf-8'):
+    return len(s.encode(encoding))

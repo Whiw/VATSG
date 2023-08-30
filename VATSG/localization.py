@@ -3,6 +3,7 @@ import locale
 
 localize_strings = {
     'ko_KR' : {
+        'contact' : "버그 제보 및 기타연락 : ",
         'appname' : "영상자막자동생성및번역기",
         'apikey' : "api키(딥엘)",
         'generate' : "자막생성",
@@ -13,9 +14,12 @@ localize_strings = {
         'choosemodel'   : "언어모델 선택",
         'donation_paypal' : "페이팔로 후원하기",
         'donation_patreon' : "패트론으로 구독해서 프로젝트 후원하기",
-        'donation_kakao' : "카카오페이로 커피한잔^^"
+        'donation_kakao' : "카카오페이로 커피한잔^^",
+        'original' : "원본자막도 생성(*원문.srt로 생성)",
+        'transcribed' : "원문"
     },
     'base' : {
+        'contact': "contact : ",
         'appname' : "Subtitlegenerator",
         'apikey' : "api Key(deepl)",
         'generate' : "generate subtitle",
@@ -26,7 +30,9 @@ localize_strings = {
         'choosemodel'   : "choose translationmodel",
         'donation_paypal' : "Support my project by Paypal",
         'donation_patreon' : "Or you can join membership in patreon to motivate this project",
-        'donation_kakao' : "If you're Korean, Use kakaopay:)"
+        'donation_kakao' : "If you're Korean, Use kakaopay:)",
+        'original' : "generate transcribed srt too(*transcribed.srt)",
+        'transcribed' : "transcribed"
     }
 }
 
