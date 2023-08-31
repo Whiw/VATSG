@@ -4,7 +4,7 @@ import locale
 localize_strings = {
     'ko_KR' : {
         'contact' : "버그 제보 및 기타연락 : ",
-        'appname' : "영상자막자동생성및번역기",
+        'appname' : "VATSG(영상자막자동생성및번역기)",
         'apikey' : "api키(딥엘)",
         'generate' : "자막생성",
         'selectfile' : "파일 열기",
@@ -20,7 +20,7 @@ localize_strings = {
     },
     'base' : {
         'contact': "contact : ",
-        'appname' : "Subtitlegenerator",
+        'appname' : "VATSG",
         'apikey' : "api Key(deepl)",
         'generate' : "generate subtitle",
         'selectfile' : "file open",

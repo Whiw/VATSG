@@ -65,7 +65,7 @@ def transcribe_fast_whisper_differently(file, option, uiwrapper):
         count = 1
         results = strs.splitlines()
         for time, result in zip(timestamp, results):
-            with open(os.path.splitext(file)[0] + ".srt", 'a', encoding='utf-8') as s:
+            with open(file_name_without_extension + ".srt", 'a', encoding='utf-8') as s:
                 """
                 print(str(count))
                 print(str(time))
@@ -85,8 +85,11 @@ def transcribe_fast_whisper_differently(file, option, uiwrapper):
         print("cpu")
         model = WhisperModel(option, device="cpu", compute_type="int8")
 
-    translatedsrtfile = os.path.splitext(file)[0] + ".srt"
-    transcribedsrtfile = os.path.splitext(file)[0] + localization.getstr("transcribed") + ".srt"
+    file_name_with_extension = os.path.basename(file)
+    file_name_without_extension, _ = os.path.splitext(file)
+
+    translatedsrtfile = file_name_without_extension + ".srt"
+    transcribedsrtfile = file_name_without_extension + localization.getstr("transcribed") + ".srt"
 
     if uiwrapper.get_srclanguagecodeinput() == "":
         print(file)
@@ -173,8 +176,11 @@ def transcribe_whisper(file, option, uiwrapper):
         print("cpu")
         model = whisper.load_model(option, device="cpu")
 
-    transcribedsrtfile = os.path.splitext(file)[0] + ".srt"
-    translatedsrtfile = os.path.splitext(file)[0] + localization.getstr("transcribed") + ".srt"
+    file_name_with_extension = os.path.basename(file)
+    file_name_without_extension, _ = os.path.splitext(file)
+
+    transcribedsrtfile = file_name_without_extension + ".srt"
+    translatedsrtfile = file_name_without_extension + localization.getstr("transcribed") + ".srt"
 
 
 
@@ -182,12 +188,12 @@ def transcribe_whisper(file, option, uiwrapper):
         print(file)
         result = model.transcribe(file, verbose=True)
         writer = get_writer("srt", os.path.dirname(file))
-        writer(result, os.path.splitext(file)[0])
+        writer(result, transcribedsrtfile)
     else:
         print(file)
         result = model.transcribe(file, verbose=True, language=uiwrapper.get_srclanguagecodeinput())
         writer = get_writer("srt", os.path.dirname(file))
-        writer(result, os.path.splitext(file)[0])
+        writer(result, transcribedsrtfile)
 
     allseconds = get_mp3_duration(file)
     uiwrapper.update_progressbar('maximum', allseconds)

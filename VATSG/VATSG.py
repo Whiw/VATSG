@@ -26,7 +26,7 @@ update_queue = queue.Queue()
 lock = threading.Lock()
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 defaultdir = "C:/Users"
 
@@ -53,7 +53,6 @@ class _CustomProgressBar(tqdm.tqdm):
         self._current += n
 
         # Handle progress here
-        print("Progress: " + str(self._current) + "/" + str(self.total))
         progressbar['maximum'] = self.total
         progressbar['value'] = self._current
         percentagelabel['text'] = str((self._current / self.total) * 100) + "%"

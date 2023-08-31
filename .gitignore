@@ -2,7 +2,12 @@
 build/
 dist/
 venv/
-
+VATSG setup/
+Asset/
+.vs/
+lib/
+pynsist_pkgs/
+wheels/
 # Ignored files
 ./*.py
 *.pyc
@@ -11,7 +16,9 @@ __pycache__/
 .idea/
 *.spec
 *.json
-
+*.cfg
+*.ico
+*.whl
 # Ignored OS-specific files
 .DS_Store
 Thumbs.db
