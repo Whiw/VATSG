@@ -115,7 +115,7 @@ def transcribe_fast_whisper_differently(file, option, uiwrapper):
                 segment.end) + "\n" + segment.text + "\n\n")
             cnt += 1
             uiwrapper.update_progressbar("value", segment.end)
-            uiwrapper.update_percentagelabel_post("text", str((segment.end / allseconds) * 100))
+            uiwrapper.update_percentagelabel_post("text", "{:.2f}".format(round((segment.end / allseconds) * 100, 2)) + "%")
 
     with open(transcribedsrtfile, 'r', encoding='utf-8', errors='ignore') as orig_srt:
         orig_srt_text = orig_srt.read().splitlines()

@@ -16,7 +16,13 @@ localize_strings = {
         'donation_patreon' : "패트론으로 구독해서 프로젝트 후원하기",
         'donation_kakao' : "카카오페이로 커피한잔^^",
         'original' : "원본자막도 생성(*원문.srt로 생성)",
-        'transcribed' : "원문"
+        'transcribed' : "원문",
+        'path' : "파일경로",
+        'size' : "크기",
+        "length" : "길이",
+        "status" : "상태",
+        'donation_account' : "후원 : 우리은행 1002-544-924007",
+        'multifile_instruction' : "아래에 파일들을 드래그 & 드랍 하세요."
     },
     'base' : {
         'contact': "contact : ",
@@ -32,7 +38,12 @@ localize_strings = {
         'donation_patreon' : "Or you can join membership in patreon to motivate this project",
         'donation_kakao' : "If you're Korean, Use kakaopay:)",
         'original' : "generate transcribed srt too(*transcribed.srt)",
-        'transcribed' : "transcribed"
+        'transcribed' : "transcribed",
+        'path': "Path",
+        'size': "Size",
+        "length": "Length",
+        "status": "Status",
+        "multifile_instruction": "Drag&drop files to below box"
     }
 }
 

@@ -173,3 +173,45 @@ def split_string_by_max_byte(s, max_bytes=102400):  # 100KB
 
 def get_byte_size(s, encoding='utf-8'):
     return len(s.encode(encoding))
+
+def get_file_size_in_mb(file_path):
+    size_in_bytes = os.path.getsize(file_path)
+    return round(size_in_bytes / (1024 * 1024), 2)  # MB 단위로 변환
+
+def treeview_sort_column(tv, col, reverse):
+    l = [(tv.set(k, col), k) for k in tv.get_children('')]
+    l.sort(reverse=reverse)
+
+    for index, (val, k) in enumerate(l):
+        tv.move(k, '', index)
+
+    tv.heading(col, command=lambda: treeview_sort_column(tv, col, not reverse))
+
+
+def sort_by_path(treeview, col, reverse):
+    items = treeview.get_children('')
+    items_values = [(treeview.item(item, 'values'), item) for item in items]
+
+    # 파일 경로에서 마지막 파일 이름을 추출하여 정렬
+    items_values.sort(reverse=reverse)
+
+    # 정렬된 아이템들로 Treeview 업데이트
+    for index, (_, item) in enumerate(items_values):
+        treeview.move(item, '', index)
+
+    treeview.heading(col, command=lambda: treeview_sort_column(treeview, col, not reverse))
+
+def shorten_path(path, max_length=50):
+    if len(path) <= max_length:
+        return path
+
+    parts = path.split('/')
+    head = parts[0]
+    tail = parts[-1]
+
+    remaining_length = max_length - len(head) - len(tail) - 6  # 6 accounts for slashes and ellipsis
+
+    if remaining_length < 0:  # In case the max_length is too short
+        return f"{head[:2]}.../{tail[-(max_length - 6):]}"
+
+    return f"{head}/.../{tail}"

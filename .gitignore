@@ -19,6 +19,7 @@ __pycache__/
 *.cfg
 *.ico
 *.whl
+*.iss
 # Ignored OS-specific files
 .DS_Store
 Thumbs.db
