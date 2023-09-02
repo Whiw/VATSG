@@ -25,7 +25,7 @@ import queue
 
 from extractaudio import get_media_length_in_time
 from utility import get_file_size_in_mb, treeview_sort_column, sort_by_path, shorten_path
-from settings import load_settings, load_apikey, settingjson, save_apikey
+from settings import load_settings, load_apikey, settingjson, save_apikey, get_settings_path
 
 update_queue = queue.Queue()
 multifile_queue = queue.Queue()
@@ -252,7 +252,7 @@ def update_ui_from_queue():
 
 
 def initialize():
-    if not os.path.exists("settings.json"):
+    if not os.path.exists(get_settings_path()):
         return
     else:
         settings = load_settings()
