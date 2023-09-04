@@ -10,7 +10,7 @@ If you are a general user who want to view any video file and mp3 file to your l
 
 ### Windows
 
-You can download it in release tab. It is split compressed because of size limit policy. you just download and decompress and run VATGS.exe file. I only tested windows 10, It worked well.
+You can download it in release tab. You can select installer version or uninstalled version which is split compressed because of size policy. I only tested windows 10, It worked well.
 
 ## Usage
 In file tab, 
@@ -20,6 +20,10 @@ In file tab,
 4. Press generate button. I tested several window10 machine only. But it works fine.
 5. It will generate *.srt file in your video file directory.
 6. Enjoy it! At first generation, Model will be downloaded so it will take some time. 
+
+In multifile tab
+I added multifile tab and you can select files to listbox and can work it sequentially. you don't have to do it one by one. 
+Also, you can edit filelist by 'del' key. 
 
 About Language code, please check [deepl](https://www.deepl.com/docs-api/translate-text/?utm_source=github&utm_medium=github-python-readme)
 
