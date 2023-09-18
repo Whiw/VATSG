@@ -148,7 +148,7 @@ def translateusingapitofile(src, tar, uiwrapper):
         f.write(result)
 
 
-def split_string_by_max_byte(s, max_bytes=102400):  # 100KB
+def split_string_by_max_byte(s, max_bytes=40960):  # 100KB
     lines = s.split('\n')
     chunks = []
     chunk = ''
@@ -167,7 +167,7 @@ def split_string_by_max_byte(s, max_bytes=102400):  # 100KB
             byte_count += line_byte_size
 
     if chunk:
-        chunks.append(chunk)
+        chunks.append(chunk.rstrip())
 
     return chunks
 

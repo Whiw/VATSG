@@ -16,6 +16,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from PIL import ImageTk
 import qrcode
 import whisper
+import stable_whisper
 
 import UIwrapper
 import localization
@@ -33,7 +34,7 @@ lock = threading.Lock()
 
 multi_processing = False
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 
 defaultdir = "C:/Users"
 
@@ -77,6 +78,8 @@ class _CustomProgressBar(tqdm.tqdm):
 transcribe_module = sys.modules['whisper.transcribe']
 transcribe_module.tqdm.tqdm = _CustomProgressBar
 
+#stable_transcribe_module = sys.modules['stable_whisper.whisper_word_level']
+#stable_transcribe_module.tqdm = _CustomProgressBar
 
 def open_donation_link():
     # Replace with your actual donation link
